@@ -1,0 +1,209 @@
+<openerp>
+  <data>
+    <record id="product_template_form_view" model="ir.ui.view">
+
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"></field>
+      <field name="arch" type="xml">
+          <field name="type" position="after">
+            <field name="calories"/>
+            <field name="servingsize"/>
+            <field name="lastupdate"/>
+
+          </field>
+          <notebook>
+              <page attrs="{'invisible':[('categ_id','!=',3)]}" name="Nutrient" string="Nutrients">
+                  <field name="nutrient_ids" widget="One2many_list">
+                      <tree editable="bottom" string="Nutrient">
+                          <field name="nutrient_id"/>
+                          <field name="value"/>
+                          <field name="dailyofmeasure"/>
+                          <field name="dailypercentage"/>
+                      </tree>
+                  </field>
+              </page>
+          </notebook>
+      </field>
+
+    </record>
+
+    <record id="product_template_tree_view" model="ir.ui.view">
+
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_tree_view"></field>
+      <field name="arch" type="xml">
+          <field name="volume" position="after">
+            <field name="calories"/>
+            <field name="servingsize"/>
+            <field name="lastupdate"/>
+
+          </field>
+      </field>
+
+    </record>
+
+
+    <record id="ditefacts_menu_form_view" model="ir.ui.view">
+
+      <field name="model">res.users.meal</field>
+      <field name="view_type">form</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+              <field name="name"/>
+              <field name="meal_date"/>
+              <field name="user_id"/>
+              <field name="totalcalories"/>
+              <field name="notes"/>
+
+          </group>
+          <notebook>
+            <page name="mealitems" string="Meal Items">
+              <field name="item_ids" widget="one2many_list">
+              <tree string="menu items" editable="bottom">
+                <field name="item_id"/>
+                <field name="calories"/>
+                <field name="serving"/>
+                <field name="notes"/>
+              </tree>
+              </field>
+            </page>
+          </notebook>
+        </form>
+      </field>
+
+    </record>
+
+
+
+    <record id="ditefact_meal_tree_view" model="ir.ui.view">
+
+      <field name="model">res.users.meal</field>
+      <field name="view_type">tree</field>
+      <field name="arch" type="xml">
+          <tree name="volume" position="after">
+            <field name="name"/>
+            <field name="meal_date"/>
+            <field name="user_id"/>
+            <field name="notes"/>
+            <field name="totalcalories" sum="Total Calories"/>
+
+
+          </tree>
+      </field>
+
+    </record>
+
+
+    <record id="ditefact_meal_kanban_view" model="ir.ui.view">
+            <field name="model">res.users.meal</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="name"/>
+                    <field name="meal_date"/>
+                    <field name="user_id"/>
+                    <field name="totalcalories"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('product.template', 'image_small')"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                    <div name="tags"/>
+                                    <strong>
+                                        <span>User: <field name="user_id"/></span>
+                                    </strong>
+                                    <div name="tags"/>
+                                    <div name="tags"/>
+                                  <strong>
+                                        <span>Date: <field name="meal_date"/></span>
+                                    </strong>
+                                  <div name="tags"/>
+                                    <div name="tags"/>
+                                  <ul>
+                                    <li>Total Calories : <field name="totalcalories"/></li>
+                                  </ul>
+                                  <div name="tags"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+    <record id="product.product_template_action_ditefacts" model="ir.actions.act_window">
+      <field name="name">Diet Items</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">product.template</field>
+      <field name="view_mode">tree,kanban,form</field>
+      <field name="view_type">form</field>
+      <field name="view_id" ref="product.product_template_tree_view"></field>
+      <field name="context">{"search_default_filter_to_sell":1}</field>
+      <field name="domain">[('categ_id.name','=',"Diet Items")]</field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            click to define new product
+          </p>
+          <p>
+            the product form contains information to simplify the sales process
+          </p>
+      </field>
+
+    </record>
+
+
+    <record id="menu_action_ditefacts" model="ir.actions.act_window">
+      <field name="name">Meals</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">res.users.meal</field>
+      <field name="view_mode">tree,kanban,form</field>
+      <field name="view_type">form</field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            click to define new menu
+          </p>
+      </field>
+
+    </record>
+
+      <record id="Meal_nutrient_action_ditefacts" model="ir.actions.act_window">
+      <field name="name">Nutrient</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">product.nutrient</field>
+      <field name="view_mode">tree,kanban,form</field>
+      <field name="view_type">form</field>
+      <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            define a new Nutrient
+          </p>
+      </field>
+
+    </record>
+
+    <menuitem id="meal_action_ditefacts"
+              sequence="15"
+              parent="base.menu_sales"
+              action="menu_action_ditefacts" />
+
+
+    <menuitem id="menu_product_template_action_ditefacts"
+              sequence="14"
+              parent="base.menu_sales"
+              action="product.product_template_action_ditefacts" />
+
+      <menuitem id="meal_nutrient_ditefacts"
+              sequence="14"
+              parent="base.menu_sales"
+              action="Meal_nutrient_action_ditefacts" />
+
+  </data>
+</openerp>
